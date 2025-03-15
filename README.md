@@ -1,4 +1,4 @@
-# Project is Still in development
+# Project is Still in Under development
 
 # Delicious Restaurant Management System
 
