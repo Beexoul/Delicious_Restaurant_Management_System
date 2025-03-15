@@ -1,7 +1,7 @@
-import managecustomer
-import manageitem
-import managemenu
-import managerprofile
+from user_manager import managecustomer
+from user_manager import manageitem
+from user_manager import managemenu
+from user_manager import managerprofile
 
 def main():
     while True:

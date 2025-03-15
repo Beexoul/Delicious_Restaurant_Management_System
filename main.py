@@ -1,7 +1,12 @@
-import admin
-import chef
-import manager
-import customer
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
+from user_admin import admin
+from user_chef import chef
+from user_manager import manager
+from user_customer import customer
 
 users = {
     "admin": {"password": "admin123", "role": "admin"},
@@ -10,12 +15,14 @@ users = {
     "customer": {"password": "customer123", "role": "customer"}
 }
 
+# Function to authenticate user
 def authenticate(username, password):
     username = username.lower() 
     if username in users and users[username]["password"] == password:
         return users[username]["role"]
     return None
 
+# Function for password recovery
 def forgot_password():
     attempts = 3
     while attempts > 0:
@@ -28,31 +35,26 @@ def forgot_password():
             print(f"Username not found. Attempts left: {attempts}")
     print("Too many failed attempts. Try again later.")
 
+# Main function
 def main():
-    print(" ")
-    print(" ")
+    print("\n--------------------------------------")
+    print("Welcome to the Delicious Restaurant!")
     print("--------------------------------------")
-    print("Welcome to the Food Ordering System!")
-    print("--------------------------------------")
+    
     while True:
         print("\n1. Login")
         print("2. Forgot Password")
         print("3. Exit")
-        print(" ")
-        print(" ")
-        choice = input("Enter your choice: ")
-        
+
+        choice = input("\nEnter your choice: ")
         if choice == "1":
             print("\n______Login Menu_______")
-            print(" ")
             username = input("Enter your username: ")
             password = input("Enter your password: ")
             role = authenticate(username, password)
             
             if role:
-                print(" ")
-                print(f"Login successful! ")
-                print("Redirecting to the", role, "menu...")
+                print(f"\nLogin successful! Redirecting to the {role} menu...\n")
                 if role == "admin":
                     admin.main()
                 elif role == "chef":
@@ -63,13 +65,17 @@ def main():
                     customer.main()
             else:
                 print("Invalid credentials! Please try again.")
+        
         elif choice == "2":
             forgot_password()
+        
         elif choice == "3":
-            print("Exiting program. Goodbye!")
+            print("\nExiting program. Goodbye!\n")
             break
+        
         else:
-            print("Invalid choice! Please try again.")
+            print("\nInvalid choice! Please try again.")
 
+# Run main
 if __name__ == "__main__":
     main()

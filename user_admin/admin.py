@@ -1,7 +1,7 @@
-import manage_user
-import view_reports
-import feedback
-import adminprofile
+from user_admin import manage_user
+from user_admin import view_reports
+from user_admin import feedback
+from user_admin import adminprofile
 
 def main():
     while True:
@@ -29,7 +29,6 @@ def main():
             print("Logging out.")
             print("..")
             print("...")
-
             break
         else:
             print("Invalid choice. Please try again.")

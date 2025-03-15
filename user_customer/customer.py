@@ -1,9 +1,14 @@
-import customerprofile
-import sendfeedback
-import orderstatus
-import order
+from user_customer import customerprofile
+from user_customer import sendfeedback
+from user_customer import orderstatus
+from user_customer import order
 def main():
     while True:
+        print("\n--------------------------------------")
+        print("Welcome to the Delicious Restaurant!")
+        print("--------------------------------------")
+        print("\n_____Welcome Customer!______")
+        print(" ")
         print("\n1. Profile")
         print("2. Place Order")
         print("3. Check Order Status")
