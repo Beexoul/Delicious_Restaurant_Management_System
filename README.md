@@ -82,7 +82,7 @@ The system supports four user roles with the following functionalities:
 
 ## How to Run the Project
 1. Ensure Python 3.13 (or compatible version) is installed.
-2. Navigate to the project directory (`Project PYP`).
+2. Navigate to the project directory (`Delicious_Restaurant_Management_System`).
 3. Run the main script:
    ```bash
    python main.py
