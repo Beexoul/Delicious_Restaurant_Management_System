@@ -7,7 +7,7 @@ def main():
     while True:
         print("--------------------------------")
         print("\n_____Welcome Admin!______")
-        print("--------------------------------")
+        print(" ")
         print(" ")
         print("1. Manage Users")
         print("2. View Reports")

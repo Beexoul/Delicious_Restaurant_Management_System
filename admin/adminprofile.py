@@ -1,3 +1,5 @@
+import json
+
 class Admin:
     def __init__(self, name, address, contact_number, bio):
         self.name = name
@@ -7,27 +9,43 @@ class Admin:
 
     def update_profile(self):
         print("\n--- Update Admin Profile ---")
-        name = input(f"Enter new name [{self.name}]: ") or self.name
-        address = input(f"Enter new address [{self.address}]: ") or self.address
-        contact_number = input(f"Enter new contact number [{self.contact_number}]: ") or self.contact_number
-        bio = input(f"Enter new bio [{self.bio}]: ") or self.bio
+        self.name = input(f"Enter new name [{self.name}]: ") or self.name
+        self.address = input(f"Enter new address [{self.address}]: ") or self.address
+        self.contact_number = input(f"Enter new contact number [{self.contact_number}]: ") or self.contact_number
+        self.bio = input(f"Enter new bio [{self.bio}]: ") or self.bio
 
-        self.name = name
-        self.address = address
-        self.contact_number = contact_number
-        self.bio = bio
-
+        self.save_to_file()
         print("\nProfile updated successfully!\n")
 
     def display_profile(self):
         print("\n--- Admin Profile ---")
+        print(" ")
         print(f"Name: {self.name}")
         print(f"Address: {self.address}")
         print(f"Contact Number: {self.contact_number}")
         print(f"Bio: {self.bio}")
 
-# Initialize Admin profile with some default values
-admin = Admin("Beexoul", "Butwal", "+977980000000", "Not every closed door is closed. Push")
+    def save_to_file(self):
+        data = {
+            'name': self.name,
+            'address': self.address,
+            'contact_number': self.contact_number,
+            'bio': self.bio
+        }
+        with open('admin_profile.json', 'w') as file:
+            json.dump(data, file, indent=4)
+
+    @classmethod
+    def load_from_file(cls):
+        try:
+            with open('admin_profile.json', 'r') as file:
+                data = json.load(file)
+                return cls(**data)
+        except FileNotFoundError:
+            return cls("Beexoul", "Butwal", "+977980000000", "Not every closed door is closed. Push")
+
+# Load profile from file or create a new one
+admin = Admin.load_from_file()
 
 def main():
     while True:
