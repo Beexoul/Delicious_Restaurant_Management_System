@@ -1,4 +1,6 @@
 ![Logo](logo.gif)
+
+
 ## Overview
 This project is a **Food Ordering System** that allows different user roles (Admin, Chef, Manager, Customer) to log in and access specific functionalities based on their role. The system includes an authentication process with a password recovery feature. After login, users are redirected to their respective dashboards (`admin`, `chef`, `manager`, `customer`) for handling relevant tasks. The project is structured using Python modules to keep the user roles and actions organized. The main file manages login, authentication, and user navigation.
 
