@@ -1,4 +1,4 @@
-![Logo](logo.gif)
+![Logo](Logo.gif)
 
 
 ## Overview
