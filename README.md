@@ -1,5 +1,3 @@
-# Project is Still in Under development
-
 # Delicious Restaurant Management System
 
 ## Overview
@@ -124,3 +122,4 @@ xAI. (2024). *Grok AI documentation*. xAI. https://grok.xai/
 
 ---
 
+`# catch: this project is under construction and will be completely released as soon as possible`
