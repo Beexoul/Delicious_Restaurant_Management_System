@@ -5,7 +5,9 @@ import adminprofile
 
 def main():
     while True:
+        print("--------------------------------")
         print("\n_____Welcome Admin!______")
+        print("--------------------------------")
         print(" ")
         print("1. Manage Users")
         print("2. View Reports")
@@ -24,7 +26,10 @@ def main():
         elif choice == "4":
             adminprofile.main()
         elif choice == "5":
-            print("Logging out...")
+            print("Logging out.")
+            print("..")
+            print("...")
+
             break
         else:
             print("Invalid choice. Please try again.")

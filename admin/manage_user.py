@@ -13,7 +13,7 @@ def main():
         print("3. manager")
         print("4. customer")
     elif choice == "2":
-        print("\nAdd User (not implemented yet).")
+        print("\nAdd User (not implemented yet, will be added soon ).")
     elif choice == "3":
         return
     else:
