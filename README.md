@@ -1,7 +1,7 @@
 # Delicious Restaurant Management System
 
 ## Overview
-
+This project is a **Food Ordering System** that allows different user roles (Admin, Chef, Manager, Customer) to log in and access specific functionalities based on their role. The system includes an authentication process with a password recovery feature. After login, users are redirected to their respective dashboards (`admin`, `chef`, `manager`, `customer`) for handling relevant tasks. The project is structured using Python modules to keep the user roles and actions organized. The main file manages login, authentication, and user navigation.
 
 ## Project Structure
 The filesystem is organized into modular directories and files to support a role-based application. Below is the layout of the project:
@@ -11,8 +11,7 @@ project_root/
 ├── __pycache__/
 │   └── (compiled Python files)
 ├── documentation/
-
-├── user_admin/)
+├── user_admin/
 │   ├── __init__.py
 │   ├── admin.py
 │   ├── adminprofile.py
