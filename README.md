@@ -80,8 +80,6 @@ The system supports four user roles with the following functionalities:
    - Update own profile.
 
 
-.
-
 ## How to Run the Project
 1. Ensure Python 3.13 (or compatible version) is installed.
 2. Navigate to the project directory (`Project PYP`).
