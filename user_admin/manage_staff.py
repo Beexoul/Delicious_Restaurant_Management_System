@@ -1,7 +1,6 @@
 import json
 import os
 
-# File path for user data (absolute path)
 USER_FILE = r"D:\Project PYP\User_Data\users.json"
 
 def load_users():
@@ -20,7 +19,6 @@ def save_users(users):
     with open(USER_FILE, 'w') as file:
         json.dump(users, file, indent=4)
 
-# Rest of the code remains unchanged (list_users, add_user, edit_user, delete_user, main)
 def list_users(users):
     """Display all users (staff only)."""
     staff = [user for user in users if user['role'] in ['chef', 'manager']]
@@ -38,11 +36,8 @@ def list_users(users):
         print(f"{username.ljust(15)} {role.ljust(10)} {password_mask}")
 
 def add_user(users):
-    """Add a new staff member."""
     print("\n--- Add New Staff ---")
     username = input("Enter username: ").strip()
-    
-    # Check for duplicate username
     for user in users:
         if user['username'].lower() == username.lower():
             print("Username already exists!")
@@ -71,7 +66,6 @@ def add_user(users):
     print(f"Staff '{username}' added successfully!")
 
 def edit_user(users):
-    """Edit an existing staff member."""
     print("\n--- Edit Staff ---")
     username = input("Enter username to edit: ").strip()
     
@@ -102,7 +96,6 @@ def edit_user(users):
     print("Staff updated successfully!")
 
 def delete_user(users):
-    """Delete a staff member."""
     print("\n--- Delete Staff ---")
     username = input("Enter username to delete: ").strip()
     
@@ -115,7 +108,6 @@ def delete_user(users):
     print("Staff not found!")
 
 def main():
-    """Main function for managing staff."""
     users = load_users()
     
     while True:

@@ -3,7 +3,6 @@ import os
 from datetime import datetime, date
 from collections import Counter
 
-# Menu items with prices (must match order.py)
 menu = {
     "Buff Mo:Mo": 150,
     "Chicken Mo:Mo": 180,
@@ -14,26 +13,22 @@ menu = {
 }
 
 def load_json_file(filename):
-    """Helper function to load a JSON file."""
     if os.path.exists(filename):
         with open(filename, 'r') as file:
             return json.load(file)
     return None
 
 def get_number_of_users():
-    """Count registered customers from customer_credentials.json."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     orders_file = os.path.join(project_root, "User_Data", "orders.json")
     
     orders = load_json_file(orders_file)
     if orders:
-        # Assuming orders.json contains unique customer orders; adjust if customer IDs exist
         return len(orders)
     return 0
 
 def get_most_selling_item():
-    """Find the most sold item from orders.json."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     orders_file = os.path.join(project_root, "User_Data", "orders.json")
@@ -54,7 +49,6 @@ def get_most_selling_item():
     return most_sold_item, quantity
 
 def get_daily_sales(today=None):
-    """Calculate daily sales for a given date (default: today)."""
     if today is None:
         today = date.today()
     
@@ -74,7 +68,7 @@ def get_daily_sales(today=None):
             order_date = datetime.strptime(order['timestamp'], "%Y-%m-%d %H:%M:%S").date()
             if order_date == today:
                 for item, quantity in order.get('orders', {}).items():
-                    if item in menu:  # Check if item exists in menu
+                    if item in menu: 
                         daily_sales[item] += quantity
                         total_income += menu[item] * quantity
         except (KeyError, ValueError) as e:
@@ -88,18 +82,15 @@ def main():
     print("Admin Report - Delicious Restaurant".center(50))
     print("--------------------------------------")
     
-    # Number of Users
     num_users = get_number_of_users()
     print(f"\nTotal Number of Registered Customers: {num_users}")
     
-    # Most Selling Food Item
     most_sold_item, quantity_sold = get_most_selling_item()
     if most_sold_item:
         print(f"\nMost Selling Food Item: {most_sold_item} ({quantity_sold} sold)")
     else:
         print("\nMost Selling Food Item: None (no orders yet)")
     
-    # Daily Sales
     today = date.today()
     daily_sales, total_income = get_daily_sales(today)
     
