@@ -2,12 +2,13 @@ from user_customer import customerprofile
 from user_customer import sendfeedback
 from user_customer import orderstatus
 from user_customer import order
-def main():
+
+def main(logged_in_username):
     while True:
         print("\n--------------------------------------")
         print("Welcome to the Delicious Restaurant!")
         print("--------------------------------------")
-        print("\n_____Welcome Customer!______")
+        print(f"\n_____Welcome Customer {logged_in_username}!______")
         print(" ")
         print("\n1. Profile")
         print("2. Place Order")
@@ -18,13 +19,13 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            customerprofile.main()
+            customerprofile.main(logged_in_username)
         elif choice == "2":
-            order.main()
+            order.main(logged_in_username)
         elif choice == "3":
-            orderstatus.main()
+            orderstatus.main(logged_in_username)      
         elif choice == "4":
-            sendfeedback.main()
+            sendfeedback.main(logged_in_username)
         elif choice == "5":
             print("Logging out.")
             print("..")
@@ -32,6 +33,3 @@ def main():
             break
         else:
             print("Invalid choice. Please try again.")
-
-if __name__ == "__main__":
-    main()

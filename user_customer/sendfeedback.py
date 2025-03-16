@@ -1,24 +1,40 @@
-# sendfeedback.py
+import json
+import os
 from datetime import datetime
 
 def save_feedback(username, feedback):
-    with open('feedbacks.txt', 'a') as file:
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        file.write(f"[{timestamp}] Customer: {username} | Feedback: {feedback}\n")
+    feedback_data = {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "username": username,
+        "feedback": feedback
+    }
+    
+    # Define feedback file path
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    feedback_file = os.path.join(project_root, "User_Data", "feedbacks.json")
+    
+    # Load existing feedback or initialize empty list
+    if os.path.exists(feedback_file):
+        with open(feedback_file, 'r') as file:
+            feedbacks = json.load(file)
+    else:
+        feedbacks = []
+    
+    # Append new feedback
+    feedbacks.append(feedback_data)
+    
+    # Save updated feedback list
+    with open(feedback_file, 'w') as file:
+        json.dump(feedbacks, file, indent=4)
+    
     print("Feedback submitted successfully!")
 
-def main():
+def main(logged_in_username):
     print("--------------------------------")
     print("\n--- Submit Feedback ---")
     print("--------------------------------")
-    print(" ")
-    
-    username = input("Enter your username: ")
-    if not username.strip():
-        print("Username cannot be empty. Returning to menu...")
-        return
-    
-    print(f"Submitting feedback as: {username}")
+    print(f"\nSubmitting feedback as: {logged_in_username}")
     print(" ")
     
     feedback = input("Enter your feedback: ")
@@ -26,9 +42,6 @@ def main():
         print("Feedback cannot be empty. Returning to menu...")
         return
     
-    save_feedback(username, feedback)
+    save_feedback(logged_in_username, feedback)
     print("Thank you for your feedback! Returning to the menu...")
     input("Press Enter to continue...")
-
-if __name__ == "__main__":
-    main()

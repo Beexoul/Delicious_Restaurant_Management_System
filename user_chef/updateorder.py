@@ -1,9 +1,17 @@
+import json
+import os
+
 def view_and_update_orders():
+    # Define orders file path
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    orders_file = os.path.join(project_root, "User_Data", "orders.json")
+    
     try:
-        with open("orderfile.txt", "r") as file:
-            lines = file.readlines()
+        with open(orders_file, 'r') as file:
+            orders = json.load(file)
             
-            if not lines or not any(line.strip() for line in lines):
+            if not orders:
                 print("No orders yet!")
                 return False
                 
@@ -11,33 +19,33 @@ def view_and_update_orders():
             print("CURRENT ORDERS".center(50))
             print("=" * 50)
             
-            # Filter and display only menu items
+            # Filter and display only menu items with their statuses
             menu_items = []
             item_index = 1
-            in_order_section = False
             
-            for line in lines:
-                line = line.strip()
-                if line.startswith("Orders:"):
-                    in_order_section = True
-                elif line.startswith("====="):
-                    in_order_section = False
-                elif in_order_section and line and not line.startswith("[Done]"):
-                    print(f"{item_index}. {line}")
-                    menu_items.append((item_index, line))
-                    item_index += 1
+            for order_idx, order in enumerate(orders):
+                for item, quantity in order['orders'].items():
+                    status = order['status'].get(item, "Pending")
+                    if status != "Done":  # Skip items already marked as Done
+                        display_text = f"{item}: {quantity} [{status}] (Order ID: {order['order_id']})"
+                        print(f"{item_index}. {display_text}")
+                        menu_items.append((order_idx, item, quantity, display_text))
+                        item_index += 1
             
             if not menu_items:
                 print("No active menu items found!")
                 return False
                 
-            return lines, menu_items
+            return orders, menu_items
             
     except FileNotFoundError:
         print("No order file found yet! No orders have been placed.")
         return False
+    except json.JSONDecodeError:
+        print("Error reading orders file. It may be corrupted.")
+        return False
 
-def update_order_status(lines, menu_items):
+def update_order_status(orders, menu_items):
     try:
         order_num = int(input("\nEnter the order number to update (or 0 to skip): "))
         if order_num == 0:
@@ -48,29 +56,29 @@ def update_order_status(lines, menu_items):
             return False
             
         print("\nOptions:")
-        print("1. Mark as Done")
-        print("2. Mark as In Preparation")
+        print("1. Mark as Completed")
+        print("2. Mark as In Progress")
         
         choice = input("Choose an action (1-2): ")
         
         if choice == "1":
-            status = "[Done]"
+            status = "Completed"
         elif choice == "2":
-            status = "[In Preparation]"
+            status = "In Progress"
         else:
             print("Invalid choice!")
             return False
             
-        # Find the actual line in the original file to update
-        selected_item = menu_items[order_num - 1][1]  # Get the menu item text
-        for i, line in enumerate(lines):
-            if line.strip() == selected_item:
-                lines[i] = f"{selected_item} {status}\n"
-                break
+        # Update the status in the orders data
+        order_idx, item, quantity, _ = menu_items[order_num - 1]
+        orders[order_idx]['status'][item] = status
         
         # Write updated orders back to file
-        with open("orderfile.txt", "w") as file:
-            file.writelines(lines)
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(script_dir)
+        orders_file = os.path.join(project_root, "User_Data", "orders.json")
+        with open(orders_file, 'w') as file:
+            json.dump(orders, file, indent=4)
             
         print("Order updated successfully!")
         return True
@@ -85,8 +93,8 @@ def main():
         result = view_and_update_orders()
         
         if result:
-            lines, menu_items = result
-            update_order_status(lines, menu_items)
+            orders, menu_items = result
+            update_order_status(orders, menu_items)
             
         choice = input("\nPress Enter to refresh orders or type 'exit' to quit: ")
         if choice.lower() == 'exit':

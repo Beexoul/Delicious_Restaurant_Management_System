@@ -1,6 +1,6 @@
-# feedback.py
 from tabulate import tabulate
 import os
+import json
 
 def main():
     print("--------------------------------")
@@ -9,37 +9,26 @@ def main():
     print(" ")
     
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(script_dir) 
-    feedback_file = os.path.join(project_root, 'feedbacks.txt')
+    project_root = os.path.dirname(script_dir)
+    feedback_file = os.path.join(project_root, "User_Data", "feedbacks.json")
     
     try:
         with open(feedback_file, 'r') as file:
-            feedbacks = file.readlines()
+            feedbacks = json.load(file)
             if not feedbacks:
-                print("No any feedback")
+                print("No feedback available.")
             else:
-                table_data = []
-                for feedback in feedbacks:
-                    feedback = feedback.strip()
-                    if feedback:
-                        try:
-                            timestamp = feedback[1:20]
-                            rest = feedback[22:]
-                            username = rest.split(" | ")[0].split(": ")[1]
-                            feedback_text = rest.split(" | ")[1].split(": ")[1]
-                            table_data.append([timestamp, username, feedback_text])
-                        except IndexError:
-                            print(f"Skipping malformed feedback entry: {feedback}")
-                            continue
-                
-                if table_data:
-                    headers = ["Timestamp", "Customer", "Feedback"]
-                    print(tabulate(table_data, headers=headers, tablefmt="grid"))
-                else:
-                    print("No valid feedback entries found")
+                table_data = [
+                    [f["timestamp"], f["username"], f["feedback"]]
+                    for f in feedbacks
+                ]
+                headers = ["Timestamp", "Customer_UserName", "Feedback"]
+                print(tabulate(table_data, headers=headers, tablefmt="grid"))
     
     except FileNotFoundError:
-        print("No any feedback (file not found)")
+        print("No feedback available (file not found).")
+    except json.JSONDecodeError:
+        print("Error reading feedback file. It may be corrupted.")
     
     print(" ")
     input("Press Enter to continue...")

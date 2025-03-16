@@ -1,4 +1,4 @@
-from user_admin import manage_user
+from user_admin import manage_staff
 from user_admin import view_reports
 from user_admin import feedback
 from user_admin import adminprofile
@@ -11,14 +11,14 @@ def main():
         print(" ")
         print("1. Manage Users")
         print("2. View Reports")
-        print("3. Provide Feedback")
+        print("3. View Feedbacks")
         print("4. Admin Profile")
         print("5. Logout")
         
         choice = input("Enter your choice: ")
         
         if choice == "1":
-            manage_user.main()
+            manage_staff.main()
         elif choice == "2":
             view_reports.main()
         elif choice == "3":

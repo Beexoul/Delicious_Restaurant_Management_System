@@ -1,9 +1,17 @@
-def display_order_status():
+import json
+import os
+
+def display_order_status(logged_in_username):
+    # Define orders file path
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    orders_file = os.path.join(project_root, "User_Data", "orders.json")
+    
     try:
-        with open("orderfile.txt", "r") as file:
-            lines = file.readlines()
+        with open(orders_file, 'r') as file:
+            all_orders = json.load(file)
             
-            if not lines or not any(line.strip() for line in lines):
+            if not all_orders:
                 print("No orders have been placed yet!")
                 return
                 
@@ -11,37 +19,32 @@ def display_order_status():
             print("YOUR ORDER STATUS".center(50))
             print("=" * 50)
             
-            # Filter and display only menu items with status
-            menu_items = []
-            in_order_section = False
+            # Filter orders for the logged-in user
+            user_orders = [order for order in all_orders if order['username'] == logged_in_username]
+            if not user_orders:
+                print("No active orders found for you!")
+                return
+                
             item_index = 1
-            
-            for line in lines:
-                line = line.strip()
-                if line.startswith("Orders:"):
-                    in_order_section = True
-                elif line.startswith("====="):
-                    in_order_section = False
-                elif in_order_section and line and not line.startswith("[Done]"):
-                    print(f"{item_index}. {line}")
-                    menu_items.append(line)
+            for order in user_orders:
+                for item, quantity in order['orders'].items():
+                    status = order['status'].get(item, "Pending")
+                    print(f"{item_index}. {item}: {quantity} [{status}]")
                     item_index += 1
             
-            if not menu_items:
-                print("No active orders found!")
+            if item_index == 1:
+                print("No items found in your orders!")
                 
     except FileNotFoundError:
         print("No orders have been placed yet!")
+    except json.JSONDecodeError:
+        print("Error reading orders file. It may be corrupted.")
 
-def main():
+def main(logged_in_username):
     print("Welcome to Order Status Checker")
     while True:
-        display_order_status()
-        
+        display_order_status(logged_in_username)
         choice = input("\nPress Enter to refresh status or type 'exit' to quit: ")
         if choice.lower() == 'exit':
             print("Thank you for checking your order status. Goodbye!")
             break
-
-if __name__ == "__main__":
-    main()

@@ -1,19 +1,40 @@
+import json
+import os
+
 def view_orders():
+    # Define orders file path
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    orders_file = os.path.join(project_root, "User_Data", "orders.json")
+    
     try:
-        with open("orderfile.txt", "r") as file:
-            orders = file.read()
+        with open(orders_file, 'r') as file:
+            orders = json.load(file)
             
-            if not orders.strip():
+            if not orders:
                 print("No orders yet!")
                 return
                 
             print("\n" + "=" * 50)
             print("CURRENT ORDERS".center(50))
             print("=" * 50)
-            print(orders)
+            
+            for order in orders:
+                print(f"\nOrder ID: {order['order_id']}")
+                print(f"Placed at: {order['timestamp']}")
+                print(f"Customer Name: {order['name']}")
+                print(f"Contact: {order['contact']}")
+                print(f"Location: {order['location']}")
+                print("Items:")
+                for item, quantity in order['orders'].items():
+                    status = order['status'].get(item, "Pending") 
+                    print(f"  - {item}: {quantity} [{status}]")
+                print("=" * 50)
             
     except FileNotFoundError:
         print("No order file found yet! No orders have been placed.")
+    except json.JSONDecodeError:
+        print("Error reading orders file. It may be corrupted.")
 
 def main():
     print("Chef's Order Viewer")
