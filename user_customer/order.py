@@ -99,6 +99,6 @@ def main():
         if choice.lower() != 'yes':
             print("Thank you for ordering!")
             break
-
+        
 if __name__ == "__main__":
     main()

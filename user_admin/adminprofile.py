@@ -13,7 +13,6 @@ class Admin:
         self.address = input(f"Enter new address [{self.address}]: ") or self.address
         self.contact_number = input(f"Enter new contact number [{self.contact_number}]: ") or self.contact_number
         self.bio = input(f"Enter new bio [{self.bio}]: ") or self.bio
-
         self.save_to_file()
         print("\nProfile updated successfully!\n")
 
@@ -44,7 +43,6 @@ class Admin:
         except FileNotFoundError:
             return cls("Beexoul", "Butwal", "+977980000000", "Not every closed door is closed. Push")
 
-# Load profile from file or create a new one
 admin = Admin.load_from_file()
 
 def main():

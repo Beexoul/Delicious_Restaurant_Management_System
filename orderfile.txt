@@ -1,9 +1,19 @@
-
+ [Done]
 === Order at 2025-03-16 14:17:49 ===
 Name: Shivam
 Contact: 9876543210
 Location: KTM
 Orders:
-Buff Mo:Mo: 3
+Buff Mo:Mo: 3 [In Preparation]
 Chicken Mo:Mo: 5
+================
+
+=== Order at 2025-03-16 17:01:14 ===
+Name: Beexoul
+Contact: 9876543210
+Location: KTM
+Orders:
+Buff Mo:Mo: 5
+Chicken Keema Noodles: 10
+Veg Mo:Mo: 17
 ================
