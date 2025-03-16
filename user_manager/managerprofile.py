@@ -43,7 +43,6 @@ class Manager:
         except FileNotFoundError:
             return cls("John Doe", "Sales", "+1234567890", "Strive for excellence.")
 
-# Load profile from file or create a new one
 manager = Manager.load_from_file()
 
 def main():
