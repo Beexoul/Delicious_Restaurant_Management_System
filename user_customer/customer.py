@@ -13,7 +13,7 @@ def main():
         print("2. Place Order")
         print("3. Check Order Status")
         print("4. Give Feedback")
-        print("5. Back to Main Menu")
+        print("5. Logout")
 
         choice = input("Enter your choice: ")
 
@@ -26,6 +26,9 @@ def main():
         elif choice == "4":
             sendfeedback.main()
         elif choice == "5":
+            print("Logging out.")
+            print("..")
+            print("...")
             break
         else:
             print("Invalid choice. Please try again.")

@@ -1,5 +1,5 @@
 from user_chef import chefprofile
-from user_chef import request
+from user_chef import Request_ingredients
 from user_chef import vieworder
 from user_chef import updateorder
 
@@ -22,7 +22,7 @@ def main():
         elif choice == "2":
             updateorder.main()
         elif choice == "3":
-            request.main()
+            Request_ingredients.main()
         elif choice == "4":
             chefprofile.main()
         elif choice == "5":

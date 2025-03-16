@@ -1,4 +1,4 @@
-![Logo](Logo.png)
+![Logo](./documentation/Logo.png)
 
 
 ## Overview
@@ -58,6 +58,8 @@ project_root/
 
 ### System Overview
 The system supports four user roles with the following functionalities:
+![Img](./documentation/img.png)
+
 1. **Administrator**
    - Manage staff (Add, Edit, Delete).
    - View sales reports (by month, chef, etc.).
