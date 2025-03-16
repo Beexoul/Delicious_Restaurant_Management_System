@@ -146,7 +146,6 @@ def save_order(customer_id, name, contact, location, orders, username):
         "status": {}  
     }
     
-    # Define orders file path
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     orders_file = os.path.join(project_root, "User_Data", "orders.json")

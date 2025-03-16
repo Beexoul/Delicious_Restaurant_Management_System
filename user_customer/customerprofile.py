@@ -47,7 +47,6 @@ class Customer:
                 data = json.load(file)
                 return cls(**data)
         else:
-            # Prompt for initial profile setup
             print("\n--- Set Up Your Profile ---")
             name = input("Enter your name: ")
             while not name.strip():
@@ -75,7 +74,6 @@ class Customer:
             return customer
 
 def main(logged_in_username):
-    # Load or create profile for the logged-in user
     customer = Customer.load_from_file(logged_in_username)
     
     while True:

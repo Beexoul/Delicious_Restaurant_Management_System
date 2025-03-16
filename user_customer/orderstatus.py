@@ -2,7 +2,6 @@ import json
 import os
 
 def display_order_status(logged_in_username):
-    # Define orders file path
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     orders_file = os.path.join(project_root, "User_Data", "orders.json")
@@ -19,7 +18,6 @@ def display_order_status(logged_in_username):
             print("YOUR ORDER STATUS".center(50))
             print("=" * 50)
             
-            # Filter orders for the logged-in user
             user_orders = [order for order in all_orders if order['username'] == logged_in_username]
             if not user_orders:
                 print("No active orders found for you!")

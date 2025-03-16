@@ -9,22 +9,18 @@ def save_feedback(username, feedback):
         "feedback": feedback
     }
     
-    # Define feedback file path
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     feedback_file = os.path.join(project_root, "User_Data", "feedbacks.json")
     
-    # Load existing feedback or initialize empty list
     if os.path.exists(feedback_file):
         with open(feedback_file, 'r') as file:
             feedbacks = json.load(file)
     else:
         feedbacks = []
     
-    # Append new feedback
     feedbacks.append(feedback_data)
     
-    # Save updated feedback list
     with open(feedback_file, 'w') as file:
         json.dump(feedbacks, file, indent=4)
     
