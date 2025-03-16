@@ -1,0 +1,37 @@
+[
+    {
+        "username": "admin",
+        "role": "admin",
+        "password": "admin123"
+    },
+    {
+        "username": "chef",
+        "role": "chef",
+        "password": "chef123"
+    },
+    {
+        "username": "manager",
+        "role": "manager",
+        "password": "manager123"
+    },
+    {
+        "username": "chef1",
+        "role": "chef",
+        "password": "chefpass"
+    },
+    {
+        "username": "manager1",
+        "role": "manager",
+        "password": "mgrpass"
+    },
+    {
+        "username": "lava",
+        "role": "manager",
+        "password": "lava123"
+    },
+    {
+        "username": "Sanjeev",
+        "role": "chef",
+        "password": "sanjeev123"
+    }
+]

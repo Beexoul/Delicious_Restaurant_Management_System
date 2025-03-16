@@ -1,27 +1,148 @@
-def main():
-    print("\n--- Manage Users ---")
-    print("1. List Users")
-    print("2. Add User")
-    print("3. Back")
+import json
+import os
 
-    choice = input("Enter your choice: ")
+# File path for user data (absolute path)
+USER_FILE = r"D:\Project PYP\User_Data\users.json"
 
-    if choice == "1":
-        print("\nUser List:")
-        print("1. admin")
-        print("2. chef")
-        print("3. manager")
-        print("4. customer")
-    elif choice == "2":
-        print("\nAdd User (not implemented yet, will be added soon ).")
-    elif choice == "3":
+def load_users():
+    """Load user data from users.json."""
+    if os.path.exists(USER_FILE):
+        with open(USER_FILE, 'r') as file:
+            return json.load(file)
+    # Default users if file doesn't exist
+    return [
+        {"username": "chef1", "role": "chef", "password": "chefpass"},
+        {"username": "manager1", "role": "manager", "password": "mgrpass"}
+    ]
+
+def save_users(users):
+    """Save user data to users.json."""
+    with open(USER_FILE, 'w') as file:
+        json.dump(users, file, indent=4)
+
+# Rest of the code remains unchanged (list_users, add_user, edit_user, delete_user, main)
+def list_users(users):
+    """Display all users (staff only)."""
+    staff = [user for user in users if user['role'] in ['chef', 'manager']]
+    if not staff:
+        print("\nNo staff found!")
         return
+    
+    print("\n--- Staff List ---")
+    print("Username".ljust(15) + "Role".ljust(10) + "Password")
+    print("-" * 40)
+    for user in staff:
+        username = user['username']
+        role = user['role']
+        password_mask = '*' * len(user['password'])
+        print(f"{username.ljust(15)} {role.ljust(10)} {password_mask}")
+
+def add_user(users):
+    """Add a new staff member."""
+    print("\n--- Add New Staff ---")
+    username = input("Enter username: ").strip()
+    
+    # Check for duplicate username
+    for user in users:
+        if user['username'].lower() == username.lower():
+            print("Username already exists!")
+            return
+    
+    role = input("Enter role (chef/manager): ").strip().lower()
+    
+    # Validate role
+    valid_roles = ["chef", "manager"]
+    if role not in valid_roles:
+        print(f"Invalid role! Must be one of: {', '.join(valid_roles)}")
+        return
+    
+    password = input("Enter password: ").strip()
+    if not password:
+        print("Password cannot be empty!")
+        return
+    
+    new_user = {
+        "username": username,
+        "role": role,
+        "password": password
+    }
+    users.append(new_user)
+    save_users(users)
+    print(f"Staff '{username}' added successfully!")
+
+def edit_user(users):
+    """Edit an existing staff member."""
+    print("\n--- Edit Staff ---")
+    username = input("Enter username to edit: ").strip()
+    
+    found_user = None
+    for user in users:
+        if user['username'].lower() == username.lower() and user['role'] in ['chef', 'manager']:
+            found_user = user
+            break
+    
+    if not found_user:
+        print("Staff not found!")
+        return
+    
+    print(f"Editing {found_user['username']}:")
+    new_role = input(f"Enter new role (chef/manager) [{found_user['role']}]: ").strip().lower() or found_user['role']
+    new_password = input("Enter new password or leave blank to keep current: ").strip()
+    
+    valid_roles = ["chef", "manager"]
+    if new_role not in valid_roles:
+        print(f"Invalid role! Keeping current role: {found_user['role']}")
     else:
-        print("Invalid choice.")
+        found_user['role'] = new_role
+    
+    if new_password:
+        found_user['password'] = new_password
+    
+    save_users(users)
+    print("Staff updated successfully!")
+
+def delete_user(users):
+    """Delete a staff member."""
+    print("\n--- Delete Staff ---")
+    username = input("Enter username to delete: ").strip()
+    
+    for i, user in enumerate(users):
+        if user['username'].lower() == username.lower() and user['role'] in ['chef', 'manager']:
+            del users[i]
+            save_users(users)
+            print(f"Staff '{username}' deleted successfully!")
+            return
+    print("Staff not found!")
+
+def main():
+    """Main function for managing staff."""
+    users = load_users()
+    
+    while True:
+        print("\n--- Manage Staff ---")
+        print("1. List Staff")
+        print("2. Add Staff")
+        print("3. Edit Staff")
+        print("4. Delete Staff")
+        print("5. Back to Admin Menu")
+        
+        choice = input("Enter your choice: ").strip()
+        
+        if choice == "1":
+            list_users(users)
+        elif choice == "2":
+            add_user(users)
+        elif choice == "3":
+            edit_user(users)
+        elif choice == "4":
+            delete_user(users)
+        elif choice == "5":
+            print("Returning to Admin Menu...")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+        
+        input("\nPress Enter to continue...")
 
 if __name__ == "__main__":
     main()
-
-
-
-#need to do this

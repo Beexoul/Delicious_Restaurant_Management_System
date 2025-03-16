@@ -24,26 +24,27 @@ def get_number_of_users():
     """Count registered customers from customer_credentials.json."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
-    credentials_file = os.path.join(project_root, "./UserData/customer_credentials.json")
+    orders_file = os.path.join(project_root, "User_Data", "orders.json")
     
-    credentials = load_json_file(credentials_file)
-    if credentials:
-        return len(credentials)
+    orders = load_json_file(orders_file)
+    if orders:
+        # Assuming orders.json contains unique customer orders; adjust if customer IDs exist
+        return len(orders)
     return 0
 
 def get_most_selling_item():
     """Find the most sold item from orders.json."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
-    orders_file = os.path.join(project_root, "orders.json")
-    
+    orders_file = os.path.join(project_root, "User_Data", "orders.json")
+
     orders = load_json_file(orders_file)
     if not orders:
         return None, 0
     
     item_counts = Counter()
     for order in orders:
-        for item, quantity in order['orders'].items():
+        for item, quantity in order.get('orders', {}).items():
             item_counts[item] += quantity
     
     if not item_counts:
@@ -53,13 +54,14 @@ def get_most_selling_item():
     return most_sold_item, quantity
 
 def get_daily_sales(today=None):
+    """Calculate daily sales for a given date (default: today)."""
     if today is None:
         today = date.today()
     
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
-    orders_file = os.path.join(project_root, "orders.json")
-    
+    orders_file = os.path.join(project_root, "User_Data", "orders.json")
+        
     orders = load_json_file(orders_file)
     if not orders:
         return {}, 0
@@ -68,11 +70,16 @@ def get_daily_sales(today=None):
     total_income = 0
     
     for order in orders:
-        order_date = datetime.strptime(order['timestamp'], "%Y-%m-%d %H:%M:%S").date()
-        if order_date == today:
-            for item, quantity in order['orders'].items():
-                daily_sales[item] += quantity
-                total_income += menu[item] * quantity
+        try:
+            order_date = datetime.strptime(order['timestamp'], "%Y-%m-%d %H:%M:%S").date()
+            if order_date == today:
+                for item, quantity in order.get('orders', {}).items():
+                    if item in menu:  # Check if item exists in menu
+                        daily_sales[item] += quantity
+                        total_income += menu[item] * quantity
+        except (KeyError, ValueError) as e:
+            print(f"Skipping order due to error: {e}")
+            continue
     
     return daily_sales, total_income
 
@@ -92,6 +99,7 @@ def main():
     else:
         print("\nMost Selling Food Item: None (no orders yet)")
     
+    # Daily Sales
     today = date.today()
     daily_sales, total_income = get_daily_sales(today)
     

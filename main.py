@@ -11,61 +11,71 @@ from user_chef import chef
 from user_manager import manager
 from user_customer import customer
 
-# Predefined staff users
-staff_users = {
-    "admin": {"password": "admin123", "role": "admin"},
-    "chef": {"password": "chef123", "role": "chef"},
-    "manager": {"password": "manager123", "role": "manager"}
-}
-
-# Ensure User_Data directory exists
-USER_DATA_DIR = "./User_Data"
+USER_DATA_DIR = r"./User_Data"
+USERS_FILE = os.path.join(USER_DATA_DIR, "users.json")
 CUSTOMER_CREDENTIALS_FILE = os.path.join(USER_DATA_DIR, "customer_credentials.json")
 
 if not os.path.exists(USER_DATA_DIR):
     os.makedirs(USER_DATA_DIR)
 
-# Load customer credentials from file
-def load_customer_credentials():
-    try:
-        with open(CUSTOMER_CREDENTIALS_FILE, "r") as file:
+def load_users():
+    if os.path.exists(USERS_FILE):
+        with open(USERS_FILE, 'r') as file:
             return json.load(file)
-    except FileNotFoundError:
-        return {}
+    return [
+        {"username": "beexoul", "role": "admin", "password": "dev@beexoul"},
+    ]
 
-# Save customer credentials to file
+# Load customer credentials from customer_credentials.json
+def load_customer_credentials():
+    """Load customer data from customer_credentials.json."""
+    if os.path.exists(CUSTOMER_CREDENTIALS_FILE):
+        with open(CUSTOMER_CREDENTIALS_FILE, 'r') as file:
+            return json.load(file)
+    return {}
+
+# Save customer credentials to customer_credentials.json
 def save_customer_credentials(credentials):
+    """Save customer data to customer_credentials.json."""
     with open(CUSTOMER_CREDENTIALS_FILE, "w") as file:
         json.dump(credentials, file, indent=4)
 
 # Authentication function
 def authenticate(username, password):
+    """Authenticate user against users.json and customer_credentials.json."""
     if not username.strip() or not password.strip():
         return None
     
     username = username.lower()
     
-    # Check staff users
-    if username in staff_users and staff_users[username]["password"] == password:
-        return staff_users[username]["role"]
+    # Check users.json (staff)
+    users = load_users()
+    for user in users:
+        if user["username"].lower() == username and user["password"] == password:
+            return user["role"]
     
-    # Check customer credentials
+    # Check customer_credentials.json (customers)
     customer_credentials = load_customer_credentials()
     if username in customer_credentials and customer_credentials[username]["password"] == password:
-        return "customer"
+        return customer_credentials[username]["role"]
     
     return None
 
 # Forgot password function
 def forgot_password():
+    """Retrieve password from users.json or customer_credentials.json."""
     attempts = 3
     while attempts > 0:
         username = input("Enter your username: ").lower()
         
-        if username in staff_users:
-            print(f"Your password is: {staff_users[username]['password']}")
-            return
+        # Check users.json (staff)
+        users = load_users()
+        for user in users:
+            if user["username"].lower() == username:
+                print(f"Your password is: {user['password']}")
+                return
         
+        # Check customer_credentials.json (customers)
         customer_credentials = load_customer_credentials()
         if username in customer_credentials:
             print(f"Your password is: {customer_credentials[username]['password']}")
@@ -78,14 +88,16 @@ def forgot_password():
 
 # Register customer function
 def register_customer():
+    """Register a new customer into customer_credentials.json."""
     print("\n--- Customer Registration ---")
     customer_credentials = load_customer_credentials()
+    users = load_users()  # Check against staff to avoid duplicates
     
     while True:
         username = input("Enter a new username: ").lower().strip()
         if not username:
             print("Username cannot be empty!")
-        elif username in staff_users or username in customer_credentials:
+        elif username in customer_credentials or any(user["username"].lower() == username for user in users):
             print("Username already taken! Please choose another.")
         else:
             break
@@ -147,6 +159,5 @@ def main():
         else:
             print("\nInvalid choice! Please try again.")
 
-# Run main
 if __name__ == "__main__":
     main()
