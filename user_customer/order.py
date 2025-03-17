@@ -3,13 +3,11 @@ import json
 import os
 
 def load_menu():
-    """Load menu from menu.json."""
     menu_file = os.path.join(os.path.dirname(__file__), "..", "User_Data", "menu.json")
     try:
         with open(menu_file, 'r') as file:
             return json.load(file)
     except FileNotFoundError:
-        # Default menu if file doesn't exist
         default_menu = {
             "Buff Mo:Mo": 150,
             "Chicken Mo:Mo": 180,
@@ -52,7 +50,7 @@ def take_order(customer_id, username):
     name = customer_data['name']
     contact = customer_data['contact_number']
     location = customer_data['address']
-    menu = load_menu()  # Load menu dynamically
+    menu = load_menu()  
     
     orders = {}
     while True:
@@ -217,3 +215,5 @@ def main(logged_in_username):
 
 if __name__ == "__main__":
     print("This module is intended to be imported by main.py. Please run main.py instead.")
+
+#done

@@ -2,7 +2,6 @@ import json
 import os
 
 def view_and_update_orders():
-    # Define orders file path
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     orders_file = os.path.join(project_root, "User_Data", "orders.json")
@@ -19,14 +18,13 @@ def view_and_update_orders():
             print("CURRENT ORDERS".center(50))
             print("=" * 50)
             
-            # Filter and display only menu items with their statuses
             menu_items = []
             item_index = 1
             
             for order_idx, order in enumerate(orders):
                 for item, quantity in order['orders'].items():
                     status = order['status'].get(item, "Pending")
-                    if status != "Done":  # Skip items already marked as Done
+                    if status != "Done": 
                         display_text = f"{item}: {quantity} [{status}] (Order ID: {order['order_id']})"
                         print(f"{item_index}. {display_text}")
                         menu_items.append((order_idx, item, quantity, display_text))
@@ -69,11 +67,9 @@ def update_order_status(orders, menu_items):
             print("Invalid choice!")
             return False
             
-        # Update the status in the orders data
         order_idx, item, quantity, _ = menu_items[order_num - 1]
         orders[order_idx]['status'][item] = status
         
-        # Write updated orders back to file
         script_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.dirname(script_dir)
         orders_file = os.path.join(project_root, "User_Data", "orders.json")
@@ -103,3 +99,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#done

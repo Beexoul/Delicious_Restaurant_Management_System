@@ -2,25 +2,21 @@ import json
 import os
 from datetime import datetime
 
-# Define file paths
 USER_DATA_DIR = r"./User_Data"
 INGREDIENT_REQUESTS_FILE = os.path.join(USER_DATA_DIR, "ingredient_requests.json")
 INVENTORY_FILE = os.path.join(USER_DATA_DIR, "inventory.json")
 
 def load_requests():
-    """Load existing ingredient requests from file."""
     if os.path.exists(INGREDIENT_REQUESTS_FILE):
         with open(INGREDIENT_REQUESTS_FILE, 'r') as file:
             return json.load(file)
     return []
 
 def save_requests(requests):
-    """Save ingredient requests to file."""
     with open(INGREDIENT_REQUESTS_FILE, 'w') as file:
         json.dump(requests, file, indent=4)
 
 def load_inventory():
-    """Load current inventory from file."""
     if os.path.exists(INVENTORY_FILE):
         with open(INVENTORY_FILE, 'r') as file:
             return json.load(file)
@@ -93,7 +89,6 @@ def manage_request(requests, pending_requests):
             ingredient = request['ingredient']
             quantity = request['quantity']
             
-            # Update inventory (assuming approval means adding to stock)
             if ingredient in inventory:
                 inventory[ingredient] += quantity
             else:
@@ -121,7 +116,6 @@ def manage_request(requests, pending_requests):
         return False
 
 def view_inventory():
-    """View current inventory levels."""
     inventory = load_inventory()
     
     if not inventory:
@@ -135,7 +129,6 @@ def view_inventory():
         print(f"{item.ljust(25)} {qty}")
 
 def main():
-    """Main function for managing ingredient requests."""
     while True:
         print("\n--- Manage Ingredient Requests ---")
         print("1. View and Manage Requests")
@@ -161,3 +154,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#done

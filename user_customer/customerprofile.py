@@ -7,7 +7,7 @@ class Customer:
         self.email = email
         self.contact_number = contact_number
         self.address = address
-        self.username = username.lower()  # Ensure username is always lowercase
+        self.username = username.lower() 
 
     def update_profile(self):
         print("\n--- Update Customer Profile ---")
@@ -35,7 +35,7 @@ class Customer:
             "email": self.email,
             "contact_number": self.contact_number,
             "address": self.address,
-            "password": credentials.get(self.username, {}).get("password", ""),  # Safely get password
+            "password": credentials.get(self.username, {}).get("password", ""),
             "role": "customer"
         }
         save_json_file(credentials_file, credentials)
@@ -44,7 +44,7 @@ class Customer:
     def load_from_file(cls, username):
         credentials_file = os.path.join("./User_Data", "customer_credentials.json")
         credentials = load_json_file(credentials_file)
-        username = username.lower()  # Ensure username is lowercase
+        username = username.lower()
         
         if username in credentials:
             data = credentials[username]
@@ -109,3 +109,5 @@ def main(logged_in_username):
 
 if __name__ == "__main__":
     print("This module is intended to be imported by main.py. Please run main.py instead.")
+
+#done

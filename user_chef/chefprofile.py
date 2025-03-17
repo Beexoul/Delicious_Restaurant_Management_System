@@ -43,7 +43,6 @@ class Chef:
         except FileNotFoundError:
             return cls("Santosh Shah", "Chicken Keema Noodles", "+977 9876540123", "23")
 
-# Load profile from file or create a new one
 chef = Chef.load_from_file()
 
 def main():
@@ -65,3 +64,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#done

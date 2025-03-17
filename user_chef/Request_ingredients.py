@@ -2,24 +2,20 @@ import json
 import os
 from datetime import datetime
 
-# Define the path for ingredient requests
 USER_DATA_DIR = r"./User_Data"
 INGREDIENT_REQUESTS_FILE = os.path.join(USER_DATA_DIR, "ingredient_requests.json")
 
 def load_requests():
-    """Load existing ingredient requests from file."""
     if os.path.exists(INGREDIENT_REQUESTS_FILE):
         with open(INGREDIENT_REQUESTS_FILE, 'r') as file:
             return json.load(file)
     return []
 
 def save_requests(requests):
-    """Save ingredient requests to file."""
     with open(INGREDIENT_REQUESTS_FILE, 'w') as file:
         json.dump(requests, file, indent=4)
 
 def request_ingredients():
-    """Handle ingredient request process."""
     print("\n--- Request Ingredients ---")
     requests = load_requests()
     
@@ -37,12 +33,11 @@ def request_ingredients():
             if not quantity:
                 print("Quantity cannot be empty!")
                 continue
-            quantity = float(quantity)  # Allow decimal values
+            quantity = float(quantity) 
             if quantity <= 0:
                 print("Quantity must be positive!")
                 continue
                 
-            # Create request entry
             request = {
                 "ingredient": ingredient,
                 "quantity": quantity,
@@ -57,12 +52,11 @@ def request_ingredients():
             print("Please enter a valid number for quantity!")
             continue
     
-    if requests != load_requests():  # Only save if there were changes
+    if requests != load_requests():
         save_requests(requests)
         print("\nAll requests saved successfully!")
 
 def view_requests():
-    """View all pending ingredient requests."""
     requests = load_requests()
     
     if not requests:
@@ -78,7 +72,6 @@ def view_requests():
             print(f"{request['timestamp'].ljust(20)} {request['ingredient'].ljust(25)} {str(request['quantity']).ljust(15)} {request['status']}")
 
 def main():
-    """Main function for ingredient request system."""
     while True:
         print("\n--- Chef Ingredient Request System ---")
         print("1. Request Ingredients")

@@ -1,7 +1,6 @@
 import json
 import os
 
-# Use the project root's User_Data directory (one level up from user_manager)
 USER_DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "User_Data")
 CREDENTIALS_FILE = os.path.join(USER_DATA_DIR, "customer_credentials.json")
 
@@ -24,8 +23,7 @@ def add_customer(credentials_file=CREDENTIALS_FILE):
     address = input("Enter address: ").strip()
     username = input("Enter username: ").strip().lower()
     password = input("Enter password: ").strip()
-    role = "customer"  # Fixed role as customer for manager-added users
-
+    role = "customer"
     credentials = load_json_file(credentials_file)
 
     if username in credentials:
@@ -65,7 +63,7 @@ def edit_customer(username, credentials_file=CREDENTIALS_FILE):
         "contact_number": contact,
         "address": address,
         "password": password,
-        "role": "customer"  # Ensure role remains customer
+        "role": "customer" 
     }
 
     save_json_file(credentials_file, credentials)
@@ -121,3 +119,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#done

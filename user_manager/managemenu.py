@@ -1,11 +1,9 @@
 import json
 import os
 
-# Use project root's User_Data directory
 MENU_FILE = os.path.join(os.path.dirname(__file__), "..", "User_Data", "menu.json")
 
 def load_menu():
-    """Load menu from menu.json or return default menu if file doesn't exist."""
     try:
         with open(MENU_FILE, 'r') as file:
             return json.load(file)
@@ -21,13 +19,11 @@ def load_menu():
         }
 
 def save_menu(menu):
-    """Save menu to menu.json."""
     os.makedirs(os.path.dirname(MENU_FILE), exist_ok=True)
     with open(MENU_FILE, 'w') as file:
         json.dump(menu, file, indent=4)
 
 def display_menu(menu):
-    """Display all menu items."""
     if not menu:
         print("\nNo items in the menu!")
         return
@@ -40,7 +36,6 @@ def display_menu(menu):
     print("-" * 35)
 
 def add_item(menu):
-    """Add a new item to the menu."""
     print("\n--- Add New Menu Item ---")
     item = input("Enter item name: ").strip()
     if item in menu:
@@ -61,7 +56,6 @@ def add_item(menu):
     print(f"Item '{item}' added successfully with price {price}!")
 
 def edit_item(menu):
-    """Edit an existing item in the menu."""
     if not menu:
         print("\nNo items in the menu to edit!")
         return
@@ -89,7 +83,6 @@ def edit_item(menu):
         print("Please enter a valid number for the price!")
 
 def delete_item(menu):
-    """Delete an item from the menu."""
     if not menu:
         print("\nNo items in the menu to delete!")
         return
@@ -106,7 +99,6 @@ def delete_item(menu):
     print(f"Item '{item}' deleted successfully!")
 
 def main():
-    """Main function for menu management."""
     menu = load_menu()
     print("Menu Management System")
     while True:
@@ -134,3 +126,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#done

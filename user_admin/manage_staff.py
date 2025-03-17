@@ -4,7 +4,6 @@ import os
 USER_FILE = r"D:\Project PYP\User_Data\users.json"
 
 def load_users():
-    """Load user data from users.json."""
     if os.path.exists(USER_FILE):
         with open(USER_FILE, 'r') as file:
             return json.load(file)
@@ -15,12 +14,10 @@ def load_users():
     ]
 
 def save_users(users):
-    """Save user data to users.json."""
     with open(USER_FILE, 'w') as file:
         json.dump(users, file, indent=4)
 
 def list_users(users):
-    """Display all users (staff only)."""
     staff = [user for user in users if user['role'] in ['chef', 'manager']]
     if not staff:
         print("\nNo staff found!")
@@ -45,7 +42,6 @@ def add_user(users):
     
     role = input("Enter role (chef/manager): ").strip().lower()
     
-    # Validate role
     valid_roles = ["chef", "manager"]
     if role not in valid_roles:
         print(f"Invalid role! Must be one of: {', '.join(valid_roles)}")
@@ -138,3 +134,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#done

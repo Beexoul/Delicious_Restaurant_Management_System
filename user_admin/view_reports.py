@@ -3,7 +3,6 @@ import os
 from datetime import datetime, date
 from collections import Counter
 
-# Menu prices
 MENU = {
     "Buff Mo:Mo": 150,
     "Chicken Mo:Mo": 180,
@@ -14,7 +13,6 @@ MENU = {
 }
 
 def load_json_file(filename):
-    """Load and return data from a JSON file, or None if it doesn't exist."""
     try:
         if os.path.exists(filename):
             with open(filename, 'r') as file:
@@ -25,18 +23,15 @@ def load_json_file(filename):
         return None
 
 def get_orders_file_path():
-    """Get the absolute path to orders.json."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     return os.path.join(project_root, "User_Data", "orders.json")
 
 def get_number_of_users():
-    """Return the number of unique registered customers."""
     orders = load_json_file(get_orders_file_path())
     return len(orders) if orders else 0
 
 def get_most_selling_item():
-    """Return the most sold item and its total quantity."""
     orders = load_json_file(get_orders_file_path())
     if not orders:
         return None, 0
@@ -51,7 +46,6 @@ def get_most_selling_item():
     return item_counts.most_common(1)[0] if item_counts else (None, 0)
 
 def get_daily_sales(today=None):
-    """Return daily sales and total income for the given date (defaults to today)."""
     if today is None:
         today = date.today()
     
@@ -63,7 +57,6 @@ def get_daily_sales(today=None):
     total_income = 0
     
     for order in orders:
-        # Validate and parse timestamp
         timestamp = order.get('timestamp')
         if not isinstance(timestamp, str):
             print(f"Skipping order with missing/invalid timestamp: {order}")
@@ -72,7 +65,6 @@ def get_daily_sales(today=None):
         try:
             order_date = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S").date()
         except ValueError as e:
-            # Attempt to fix common timestamp issues
             corrected = False
             if 'd' in timestamp:
                 try:
@@ -95,23 +87,19 @@ def get_daily_sales(today=None):
     return daily_sales, total_income
 
 def print_admin_report():
-    """Print the admin report with user count, top item, and daily sales."""
     print("\n" + "-" * 38)
     print("Admin Report - Delicious Restaurant".center(38))
     print("-" * 38)
 
-    # Total number of registered customers
     num_users = get_number_of_users()
     print(f"\nTotal Number of Registered Customers: {num_users}")
 
-    # Most selling item
     most_sold_item, quantity_sold = get_most_selling_item()
     if most_sold_item:
         print(f"\nMost Selling Food Item: {most_sold_item} ({quantity_sold} sold)")
     else:
         print("\nMost Selling Food Item: None (no orders yet)")
 
-    # Daily sales report
     today = date.today()
     daily_sales, total_income = get_daily_sales(today)
     
@@ -133,3 +121,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#done
