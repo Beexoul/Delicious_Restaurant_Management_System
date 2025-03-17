@@ -160,10 +160,12 @@ def main():
             print("2. Rabin Shrestha")
             print("3. Bijayaa Subedi")
             print("4. Slok Chaulagain")
-            print("--------------------------------------")
             print("    ")
             print("    ")
-            print("Special thanks to Shiva Raj Paudel ")
+            print("------------------------------------------------------")
+            print("Special thanks to Shiva Raj Paudel and Saroj Neupane  ")
+            print("------------------------------------------------------")
+
 
         else:
             print("\nInvalid choice! Please try again.")
