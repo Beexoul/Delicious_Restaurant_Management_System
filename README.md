@@ -1,10 +1,13 @@
-![Logo](./documentation/Logo.png)
+![Logo](./documentation/Logo_Project.png)
 
 ## Overview
 This project is a **Food Ordering System** that allows different user roles (Admin, Chef, Manager, Customer) to log in and access specific functionalities based on their role. The system includes an authentication process with a password recovery feature. After login, users are redirected to their respective dashboards (`admin`, `chef`, `manager`, `customer`) for handling relevant tasks. The project is structured using Python modules to keep the user roles and actions organized. The main file manages login, authentication, and user navigation.
 
 ## Project Structure
 The filesystem is organized into modular directories and files to support a role-based application. Below is the layout of the project:
+
+![File_System](./documentation/File_System.png)
+
 
 ```
 project_root/
@@ -124,5 +127,3 @@ Python Software Foundation. (2024). *Python 3.13 documentation*. Python.org. htt
 Stack Exchange Inc. (2024). *Stack Overflow: Python programming Q&A*. Stack Exchange. https://stackexchange.com/
 xAI. (2024). *Grok AI documentation*. xAI. https://grok.xai/  
 ---
-
-`# catch: this project is under construction and will be completely released as soon as possible`
