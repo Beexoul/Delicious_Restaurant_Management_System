@@ -1,7 +1,7 @@
 import json
 import os
 
-USER_FILE = r"D:\Project PYP\User_Data\users.json"
+USER_FILE = r".\User_Data\users.json"
 
 def load_users():
     if os.path.exists(USER_FILE):
