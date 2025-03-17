@@ -31,7 +31,7 @@ class Manager:
             'contact_number': self.contact_number,
             'bio': self.bio
         }
-        with open('manager_profile.json', 'w') as file:
+        with open('./User_Data/manager_profile.json', 'w') as file:
             json.dump(data, file, indent=4)
 
     @classmethod

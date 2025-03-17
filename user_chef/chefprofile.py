@@ -31,13 +31,13 @@ class Chef:
             'contact_number': self.contact_number,
             'experience': self.experience
         }
-        with open('chef_profile.json', 'w') as file:
+        with open('./User_Data/chef_profile.json', 'w') as file:
             json.dump(data, file, indent=4)
 
     @classmethod
     def load_from_file(cls):
         try:
-            with open('chef_profile.json', 'r') as file:
+            with open('./User_Data/chef_profile.json', 'r') as file:
                 data = json.load(file)
                 return cls(**data)
         except FileNotFoundError:

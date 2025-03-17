@@ -31,7 +31,7 @@ class Admin:
             'contact_number': self.contact_number,
             'bio': self.bio
         }
-        with open('admin_profile.json', 'w') as file:
+        with open('./User_Data/admin_profile.json', 'w') as file:
             json.dump(data, file, indent=4)
 
     @classmethod
