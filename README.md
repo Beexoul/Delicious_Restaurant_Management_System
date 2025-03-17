@@ -93,7 +93,7 @@ The system supports four user roles with the following functionalities:
    - Admin: `admin` / `admin123`
    - Chef: `chef` / `chef123`
    - Manager: `manager` / `manager123`
-   - Customer: `customer` / `customer123`
+   - Customer: as the registered .
 5. Follow the menu prompts to navigate the system.
 
 ## Assumptions
