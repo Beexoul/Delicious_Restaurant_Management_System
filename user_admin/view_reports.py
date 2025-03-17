@@ -3,7 +3,8 @@ import os
 from datetime import datetime, date
 from collections import Counter
 
-menu = {
+# Menu prices
+MENU = {
     "Buff Mo:Mo": 150,
     "Chicken Mo:Mo": 180,
     "Veg Mo:Mo": 120,
@@ -13,50 +14,48 @@ menu = {
 }
 
 def load_json_file(filename):
-    if os.path.exists(filename):
-        with open(filename, 'r') as file:
-            return json.load(file)
-    return None
+    """Load and return data from a JSON file, or None if it doesn't exist."""
+    try:
+        if os.path.exists(filename):
+            with open(filename, 'r') as file:
+                return json.load(file)
+        return None
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON file {filename}: {e}")
+        return None
+
+def get_orders_file_path():
+    """Get the absolute path to orders.json."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    return os.path.join(project_root, "User_Data", "orders.json")
 
 def get_number_of_users():
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(script_dir)
-    orders_file = os.path.join(project_root, "User_Data", "orders.json")
-    
-    orders = load_json_file(orders_file)
-    if orders:
-        return len(orders)
-    return 0
+    """Return the number of unique registered customers."""
+    orders = load_json_file(get_orders_file_path())
+    return len(orders) if orders else 0
 
 def get_most_selling_item():
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(script_dir)
-    orders_file = os.path.join(project_root, "User_Data", "orders.json")
-
-    orders = load_json_file(orders_file)
+    """Return the most sold item and its total quantity."""
+    orders = load_json_file(get_orders_file_path())
     if not orders:
         return None, 0
     
     item_counts = Counter()
     for order in orders:
-        for item, quantity in order.get('orders', {}).items():
-            item_counts[item] += quantity
+        orders_dict = order.get('orders', {})
+        for item, quantity in orders_dict.items():
+            if isinstance(quantity, (int, float)) and quantity > 0:
+                item_counts[item] += quantity
     
-    if not item_counts:
-        return None, 0
-    
-    most_sold_item, quantity = item_counts.most_common(1)[0]
-    return most_sold_item, quantity
+    return item_counts.most_common(1)[0] if item_counts else (None, 0)
 
 def get_daily_sales(today=None):
+    """Return daily sales and total income for the given date (defaults to today)."""
     if today is None:
         today = date.today()
     
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(script_dir)
-    orders_file = os.path.join(project_root, "User_Data", "orders.json")
-        
-    orders = load_json_file(orders_file)
+    orders = load_json_file(get_orders_file_path())
     if not orders:
         return {}, 0
     
@@ -64,48 +63,72 @@ def get_daily_sales(today=None):
     total_income = 0
     
     for order in orders:
-        try:
-            order_date = datetime.strptime(order['timestamp'], "%Y-%m-%d %H:%M:%S").date()
-            if order_date == today:
-                for item, quantity in order.get('orders', {}).items():
-                    if item in menu: 
-                        daily_sales[item] += quantity
-                        total_income += menu[item] * quantity
-        except (KeyError, ValueError) as e:
-            print(f"Skipping order due to error: {e}")
+        # Validate and parse timestamp
+        timestamp = order.get('timestamp')
+        if not isinstance(timestamp, str):
+            print(f"Skipping order with missing/invalid timestamp: {order}")
             continue
+        
+        try:
+            order_date = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S").date()
+        except ValueError as e:
+            # Attempt to fix common timestamp issues
+            corrected = False
+            if 'd' in timestamp:
+                try:
+                    corrected_timestamp = timestamp.replace('d', str(today.day).zfill(2))
+                    order_date = datetime.strptime(corrected_timestamp, "%Y-%m-%d %H:%M:%S").date()
+                    print(f"Corrected timestamp '{timestamp}' to '{corrected_timestamp}'")
+                    corrected = True
+                except ValueError:
+                    pass
+            if not corrected:
+                print(f"Skipping order due to timestamp error: {e} - Order: {order}")
+                continue
+
+        if order_date == today:
+            for item, quantity in order.get('orders', {}).items():
+                if item in MENU and isinstance(quantity, (int, float)) and quantity > 0:
+                    daily_sales[item] += quantity
+                    total_income += MENU[item] * quantity
     
     return daily_sales, total_income
 
-def main():
-    print("\n--------------------------------------")
-    print("Admin Report - Delicious Restaurant".center(50))
-    print("--------------------------------------")
-    
+def print_admin_report():
+    """Print the admin report with user count, top item, and daily sales."""
+    print("\n" + "-" * 38)
+    print("Admin Report - Delicious Restaurant".center(38))
+    print("-" * 38)
+
+    # Total number of registered customers
     num_users = get_number_of_users()
     print(f"\nTotal Number of Registered Customers: {num_users}")
-    
+
+    # Most selling item
     most_sold_item, quantity_sold = get_most_selling_item()
     if most_sold_item:
         print(f"\nMost Selling Food Item: {most_sold_item} ({quantity_sold} sold)")
     else:
         print("\nMost Selling Food Item: None (no orders yet)")
-    
+
+    # Daily sales report
     today = date.today()
     daily_sales, total_income = get_daily_sales(today)
     
     print(f"\nSales Report for {today}:")
     if daily_sales:
-        print("Item Name".ljust(25) + "Quantity Sold".ljust(15) + "Revenue")
-        print("-" * 65)
+        print(f"{'Item Name':<25} {'Quantity Sold':<15} {'Revenue':<10}")
+        print("-" * 50)
         for item, quantity in daily_sales.items():
-            revenue = menu[item] * quantity
-            print(f"{item.ljust(25)} {str(quantity).ljust(15)} {revenue}")
-        print("-" * 65)
-        print(f"Total Income Today:".ljust(50) + f"{total_income}")
+            revenue = MENU[item] * quantity
+            print(f"{item:<25} {quantity:<15} {revenue:<10}")
+        print("-" * 50)
+        print(f"{'Total Income Today:':<40} {total_income}")
     else:
         print("No sales recorded for today.")
-    
+
+def main():
+    print_admin_report()
     input("\nPress Enter to return to the admin menu...")
 
 if __name__ == "__main__":

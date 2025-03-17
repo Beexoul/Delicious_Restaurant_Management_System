@@ -13,10 +13,5 @@
         "username": "manager",
         "role": "manager",
         "password": "manager123"
-    },
-    {
-        "username": "Beexoul1",
-        "role": "chef",
-        "password": "Beexoul@123"
     }
 ]

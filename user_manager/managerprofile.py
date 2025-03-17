@@ -37,11 +37,11 @@ class Manager:
     @classmethod
     def load_from_file(cls):
         try:
-            with open('manager_profile.json', 'r') as file:
+            with open('./User_Data/manager_profile.json', 'r') as file:
                 data = json.load(file)
                 return cls(**data)
         except FileNotFoundError:
-            return cls("John Doe", "Sales", "+1234567890", "Strive for excellence.")
+            return cls("Saroj Neupane", "Manager", "+977 9871234560", " Living my best life, Always learning.")
 
 manager = Manager.load_from_file()
 

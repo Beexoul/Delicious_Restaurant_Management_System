@@ -41,7 +41,7 @@ class Admin:
                 data = json.load(file)
                 return cls(**data)
         except FileNotFoundError:
-            return cls("Beexoul", "Butwal", "+977980000000", "Not every closed door is closed. Push")
+            return cls("Shiva Raj Paudel", "Butwal", "+977 9849984855", "Not every closed door is closed. Push")
 
 admin = Admin.load_from_file()
 

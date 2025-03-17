@@ -41,7 +41,7 @@ class Chef:
                 data = json.load(file)
                 return cls(**data)
         except FileNotFoundError:
-            return cls("Gordon Ramsay", "Italian Cuisine", "+1234567890", "20")
+            return cls("Santosh Shah", "Chicken Keema Noodles", "+977 9876540123", "23")
 
 # Load profile from file or create a new one
 chef = Chef.load_from_file()

@@ -10,8 +10,8 @@ def load_users():
             return json.load(file)
     # Default users if file doesn't exist
     return [
-        {"username": "chef1", "role": "chef", "password": "chefpass"},
-        {"username": "manager1", "role": "manager", "password": "mgrpass"}
+        {"username": "chef", "role": "chef", "password": "chef123"},
+        {"username": "manager", "role": "manager", "password": "manager123"}
     ]
 
 def save_users(users):

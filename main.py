@@ -119,6 +119,7 @@ def main():
         print("2. Register (Customer Only)")
         print("3. Forgot Password")
         print("4. Exit")
+        print("5. Credit")
 
         choice = input("\nEnter your choice: ").strip()
         
@@ -151,6 +152,18 @@ def main():
             print("\nExiting program. Goodbye!\n")
             break
         
+        elif choice == '5':
+            print("\nTeam Members:")
+            print("--------------------------------------")
+            print("1. Sanjeev Khatri")
+            print("2. Rabin Shrestha")
+            print("3. Bijayaa Subedi")
+            print("4. Slok Chaulagain")
+            print("--------------------------------------")
+            print("    ")
+            print("    ")
+            print("Special thanks to Shiva Raj Paudel ")
+
         else:
             print("\nInvalid choice! Please try again.")
 
