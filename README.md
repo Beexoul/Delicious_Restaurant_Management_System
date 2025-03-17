@@ -10,7 +10,8 @@ The filesystem is organized into modular directories and files to support a role
 
 
 ```
-project_root/
+Delicious Restaurant Management System/
+│
 ├── documentation/
 ├── user_admin/
 │   ├── __init__.py
@@ -19,6 +20,7 @@ project_root/
 │   ├── feedback.py
 │   ├── manage_user.py
 │   └── view_reports.py
+│   
 ├── user_chef/
 │   ├── __init__.py
 │   ├── chef.py
@@ -26,6 +28,7 @@ project_root/
 │   ├── request.py
 │   ├── updateorder.py
 │   └── vieworder.py
+│   
 ├── user_customer/
 │   ├── __init__.py
 │   ├── customer.py
@@ -33,6 +36,7 @@ project_root/
 │   ├── order.py
 │   ├── orderstatus.py
 │   └── sendfeedback.py
+│   
 ├── User_Data/
 │   ├── customer_credentials.json
 │   ├── feedbacks.json
@@ -40,6 +44,7 @@ project_root/
 │   ├── menu.json
 │   ├── orders.json
 │   └── users.json
+│   
 ├── user_manager/
 │   ├── __init__.py
 │   ├── managecustomer.py
@@ -47,7 +52,9 @@ project_root/
 │   ├── managemenu.py
 │   ├── manager.py
 │   └── managerprofile.py
+│   
 ├── main.py
+│   
 └── README.md
 ```
 
