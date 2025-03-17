@@ -2,16 +2,28 @@ import datetime
 import json
 import os
 
-menu = {
-    "Buff Mo:Mo": 150,
-    "Chicken Mo:Mo": 180,
-    "Veg Mo:Mo": 120,
-    "Veg Keema Noodles": 150,
-    "Buff Keema Noodles": 180,
-    "Chicken Keema Noodles": 200
-}
+def load_menu():
+    """Load menu from menu.json."""
+    menu_file = os.path.join(os.path.dirname(__file__), "..", "User_Data", "menu.json")
+    try:
+        with open(menu_file, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        # Default menu if file doesn't exist
+        default_menu = {
+            "Buff Mo:Mo": 150,
+            "Chicken Mo:Mo": 180,
+            "Veg Mo:Mo": 120,
+            "Veg Keema Noodles": 150,
+            "Buff Keema Noodles": 180,
+            "Chicken Keema Noodles": 200
+        }
+        os.makedirs(os.path.dirname(menu_file), exist_ok=True)
+        with open(menu_file, 'w') as file:
+            json.dump(default_menu, file, indent=4)
+        return default_menu
 
-def display_menu():
+def display_menu(menu):
     print("\n=== Menu ===")
     print("Item Name".ljust(25) + "Price")
     print("-" * 35)
@@ -20,22 +32,27 @@ def display_menu():
     print("-" * 35)
 
 def load_customer_profile(username):
-    filename = f"./User_Data/customer_profile_{username}.json"
+    credentials_file = os.path.join(os.path.dirname(__file__), "..", "User_Data", "customer_credentials.json")
     try:
-        with open(filename, 'r') as file:
-            return json.load(file)
+        with open(credentials_file, 'r') as file:
+            credentials = json.load(file)
+            username = username.lower()
+            if username in credentials:
+                return credentials[username]
+            return None
     except FileNotFoundError:
         return None
 
 def take_order(customer_id, username):
     customer_data = load_customer_profile(username)
     if not customer_data:
-        print("Please create a profile first in the Profile menu!")
+        print("Please set up your profile first in the Profile menu!")
         return None, None, None, None
     
     name = customer_data['name']
     contact = customer_data['contact_number']
     location = customer_data['address']
+    menu = load_menu()  # Load menu dynamically
     
     orders = {}
     while True:
@@ -49,7 +66,7 @@ def take_order(customer_id, username):
         choice = input("Enter your choice: ")
         
         if choice == "1":
-            display_menu()
+            display_menu(menu)
             item = input("\nEnter item name to order: ")
             if item in menu:
                 try:
@@ -111,13 +128,13 @@ def take_order(customer_id, username):
             if not orders:
                 print("No items in your order yet!")
             else:
-                generate_bill(name, contact, location, orders)
+                generate_bill(name, contact, location, orders, menu)
                 
         elif choice == "5":  
             if not orders:
                 print("No items to confirm!")
             else:
-                generate_bill(name, contact, location, orders)
+                generate_bill(name, contact, location, orders, menu)
                 payment = input("Enter 'pay' to confirm payment: ")
                 if payment.lower() == 'pay':
                     save_order(customer_id, name, contact, location, orders, username)
@@ -137,19 +154,17 @@ def save_order(customer_id, name, contact, location, orders, username):
     order_data = {
         "order_id": f"{customer_id}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}",  
         "customer_id": customer_id,
-        "username": username,
+        "username": username.lower(),
         "name": name,
         "contact": contact,
         "location": location,
-        "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "timestamp": datetime.datetime.now().strftime("%Y-%m-d %H:%M:%S"),
         "orders": orders,
         "status": {}  
     }
     
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(script_dir)
-    orders_file = os.path.join(project_root, "User_Data", "orders.json")
-
+    orders_file = os.path.join(os.path.dirname(__file__), "..", "User_Data", "orders.json")
+    os.makedirs(os.path.dirname(orders_file), exist_ok=True)
     
     if os.path.exists(orders_file):
         with open(orders_file, 'r') as file:
@@ -162,7 +177,7 @@ def save_order(customer_id, name, contact, location, orders, username):
     with open(orders_file, 'w') as file:
         json.dump(all_orders, file, indent=4)
 
-def generate_bill(name, contact, location, orders):
+def generate_bill(name, contact, location, orders, menu):
     print("\n" + "=" * 50)
     print("RESTAURANT BILL".center(50))
     print("=" * 50)
@@ -199,3 +214,6 @@ def main(logged_in_username):
                 break
     else:
         print("Please set up your profile first in the Profile menu!")
+
+if __name__ == "__main__":
+    print("This module is intended to be imported by main.py. Please run main.py instead.")

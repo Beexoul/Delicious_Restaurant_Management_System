@@ -37,7 +37,7 @@ class Admin:
     @classmethod
     def load_from_file(cls):
         try:
-            with open('admin_profile.json', 'r') as file:
+            with open('./User_Data/admin_profile.json', 'r') as file:
                 data = json.load(file)
                 return cls(**data)
         except FileNotFoundError:

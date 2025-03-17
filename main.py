@@ -9,7 +9,7 @@ from user_chef import chef
 from user_manager import manager
 from user_customer import customer
 
-USER_DATA_DIR = r"./User_Data"
+USER_DATA_DIR = os.path.join(os.path.dirname(__file__), "User_Data")
 USERS_FILE = os.path.join(USER_DATA_DIR, "users.json")
 CUSTOMER_CREDENTIALS_FILE = os.path.join(USER_DATA_DIR, "customer_credentials.json")
 
@@ -71,10 +71,11 @@ def forgot_password():
         print(f"Username not found. Attempts left: {attempts}")
     
     print("Too many failed attempts. Try again later.")
+
 def register_customer():
     print("\n--- Customer Registration ---")
     customer_credentials = load_customer_credentials()
-    users = load_users() 
+    users = load_users()
     
     while True:
         username = input("Enter a new username: ").lower().strip()
@@ -92,7 +93,19 @@ def register_customer():
         else:
             break
     
-    customer_credentials[username] = {"password": password, "role": "customer"}
+    name = input("Enter your name: ").strip()
+    email = input("Enter your email: ").strip()
+    contact = input("Enter your contact number: ").strip()
+    address = input("Enter your address: ").strip()
+
+    customer_credentials[username] = {
+        "name": name,
+        "email": email,
+        "contact_number": contact,
+        "address": address,
+        "password": password,
+        "role": "customer"
+    }
     save_customer_credentials(customer_credentials)
     print(f"Registration successful! You can now log in as '{username}'.")
 

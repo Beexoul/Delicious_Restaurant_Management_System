@@ -7,7 +7,7 @@ class Customer:
         self.email = email
         self.contact_number = contact_number
         self.address = address
-        self.username = username 
+        self.username = username.lower()  # Ensure username is always lowercase
 
     def update_profile(self):
         print("\n--- Update Customer Profile ---")
@@ -16,7 +16,7 @@ class Customer:
         self.contact_number = input(f"Enter new contact number [{self.contact_number}]: ") or self.contact_number
         self.address = input(f"Enter new address [{self.address}]: ") or self.address
 
-        self.save_to_file()
+        self.save_to_credentials()
         print("\nProfile updated successfully!\n")
 
     def display_profile(self):
@@ -27,51 +27,66 @@ class Customer:
         print(f"Contact Number: {self.contact_number}")
         print(f"Address: {self.address}")
 
-    def save_to_file(self):
-        data = {
-            'name': self.name,
-            'email': self.email,
-            'contact_number': self.contact_number,
-            'address': self.address,
-            'username': self.username
+    def save_to_credentials(self):
+        credentials_file = os.path.join("./User_Data", "customer_credentials.json")
+        credentials = load_json_file(credentials_file)
+        credentials[self.username] = {
+            "name": self.name,
+            "email": self.email,
+            "contact_number": self.contact_number,
+            "address": self.address,
+            "password": credentials.get(self.username, {}).get("password", ""),  # Safely get password
+            "role": "customer"
         }
-        filename = f"./User_Data/customer_profile_{self.username}.json"
-        with open(filename, 'w') as file:
-            json.dump(data, file, indent=4)
+        save_json_file(credentials_file, credentials)
 
     @classmethod
     def load_from_file(cls, username):
-        filename = f"./User_Data/customer_profile_{username}.json"
-        if os.path.exists(filename):
-            with open(filename, 'r') as file:
-                data = json.load(file)
-                return cls(**data)
+        credentials_file = os.path.join("./User_Data", "customer_credentials.json")
+        credentials = load_json_file(credentials_file)
+        username = username.lower()  # Ensure username is lowercase
+        
+        if username in credentials:
+            data = credentials[username]
+            return cls(data["name"], data["email"], data["contact_number"], data["address"], username)
         else:
             print("\n--- Set Up Your Profile ---")
-            name = input("Enter your name: ")
-            while not name.strip():
+            name = input("Enter your name: ").strip()
+            while not name:
                 print("Name cannot be empty!")
-                name = input("Enter your name: ")
+                name = input("Enter your name: ").strip()
             
-            email = input("Enter your email: ")
-            while not email.strip():
+            email = input("Enter your email: ").strip()
+            while not email:
                 print("Email cannot be empty!")
-                email = input("Enter your email: ")
+                email = input("Enter your email: ").strip()
             
-            contact_number = input("Enter your contact number: ")
-            while not contact_number.strip():
+            contact_number = input("Enter your contact number: ").strip()
+            while not contact_number:
                 print("Contact number cannot be empty!")
-                contact_number = input("Enter your contact number: ")
+                contact_number = input("Enter your contact number: ").strip()
             
-            address = input("Enter your address: ")
-            while not address.strip():
+            address = input("Enter your address: ").strip()
+            while not address:
                 print("Address cannot be empty!")
-                address = input("Enter your address: ")
+                address = input("Enter your address: ").strip()
             
             customer = cls(name, email, contact_number, address, username)
-            customer.save_to_file()
+            customer.save_to_credentials()
             print("Profile created successfully!")
             return customer
+
+def load_json_file(filename):
+    try:
+        with open(filename, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {}
+
+def save_json_file(filename, data):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, 'w') as file:
+        json.dump(data, file, indent=4)
 
 def main(logged_in_username):
     customer = Customer.load_from_file(logged_in_username)
@@ -91,3 +106,6 @@ def main(logged_in_username):
             break
         else:
             print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    print("This module is intended to be imported by main.py. Please run main.py instead.")
